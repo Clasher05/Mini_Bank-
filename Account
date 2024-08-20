@@ -1,0 +1,141 @@
+package MIniBank;
+
+import java.util.Scanner;
+
+public class Account {
+	String customerName;
+	String customerID;
+	int balance=0;
+	int previousTransaction=0;
+
+	Account(String customerName, String customerID){
+		this.customerName=customerName;
+		this.customerID=customerID;
+	}
+	
+	//Deposit
+	
+	void deposit(int amount) {
+		if(amount>0) {
+			balance=balance+amount;
+			previousTransaction=amount;
+			System.out.println("Amount Deposited Successfully");
+			System.out.println("New Balance is :"+balance );
+		}
+		else {
+			System.out.println("Please enter amount greater than 0");
+		}
+	}
+	
+	//Withdraw
+	void  withdraw(int amount) {
+		if(amount<balance) {
+			//checking sample balance availability
+			if(amount>0) {
+				balance=balance-amount;
+				previousTransaction=-amount;
+				System.out.println("Withdrawal Successfully");
+				System.out.println("New balance is :"+balance);
+			}
+			else {
+				System.out.print("Please Enter amount greater than 0");
+			}
+		}
+		else {
+			System.out.println("Insufficient Fund amount can't Withdraw");
+		}
+	}
+	
+	void getPreviousTransaction() {
+		if(previousTransaction>0) {
+			
+			System.out.println("Deposited:"+previousTransaction);
+		}
+		else if(previousTransaction<0) {
+			System.out.println("Withdrawn"+previousTransaction);
+		}
+		else {
+			System.out.println("No transaction is occured");
+		}
+		
+	}
+	
+	void calculateIntrest(int years) {
+		double interestRate=.0185;//constant rate 
+		double newBalance=(balance*interestRate*years)+balance;//year is received as parameter 
+		System.out.println("The current interest rate is "+(100*interestRate)+"%");
+		System.out.println("After"+years+"years, your balance will be :"+newBalance );
+		
+	}
+
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner scan=new Scanner(System.in);
+		System.out.println("Enter Account name: ");
+		String custName=scan.nextLine();
+		System.out.println("Enter Customer ID: ");
+		String custID=scan.nextLine();
+		Account account=new Account(custName,custID);
+		
+		
+		System.out.println("------------------------------------------------------------------");
+		System.out.println("Welcome,"+account.customerName+"!");
+		System.out.println("Your ID is: "+account.customerID);
+		System.out.println("-------------------------------------------------------------------");
+		
+		System.out.println("Select any option to proceed");
+		System.out.println();
+		System.out.println("A. Check Balance");
+		System.out.println("B. Deposite");
+		System.out.println("C. Withdraw");
+		System.out.println("D. Previous Transaction");
+		System.out.println("E. Interest");
+		System.out.println("F. Exit");
+		
+		
+		char option;//char data type variable to accept user choice
+		boolean flag=true;//Will be used to loop until user exits the program
+		
+		while(flag) {
+			System.out.println("Enter your choice");
+			option=scan.next().charAt(0);
+			
+			switch(option) {
+			case 'A':
+				System.out.println("Account Balance=$"+account.balance);
+				break;
+			case  'B':
+				System.out.println("Enter an amount to deposit:");
+				int depositAmount=scan.nextInt();
+				account.deposit(depositAmount);
+				break;
+			case 'C':
+				System.out.println("Enter an amount to withdraw:");
+				int withdrawAmount=scan.nextInt();
+				account.withdraw(withdrawAmount);
+				break;
+			case 'D':
+				account.getPreviousTransaction();
+				break;
+				
+			case 'E':
+				System.out.println("Enter the years for which you wish to calculate the interest:");
+				int years=scan.nextInt();
+				account.calculateIntrest(years);
+				break;
+			case 'F':
+				System.out.println("Thank you for banking with us!");
+				
+				flag=false;
+				
+				break;
+				default:System.out.println("Error:Invalid option.Please enter A,B,C,D or E to access services.");
+ 				
+			}
+		}
+		
+		scan.close();
+	}
+
+}
